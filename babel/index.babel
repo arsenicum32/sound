@@ -1,0 +1,30 @@
+var x = document.getElementById("demo");
+var fault = [], iterator = 0;
+setInterval(_=>{
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}, 250)
+function showPosition(p) {
+    fault[iterator] = [p.coords.latitude , p.coords.longitude ];
+    iterator < 100 ? iterator++ : iterator = 0;
+    x.innerHTML = countFault(fault);
+    //x.innerHTML = "Latitude: " + p.coords.latitude + 
+    //"<br>Longitude: " + p.coords.longitude; 
+}
+
+function countFault(arr){
+  var all = 0;
+  for(var i=1;i<arr.length;i++){
+    all+=Math.abs(arr[i][0]-arr[i-1][0]);
+  }
+  var f = all.toString().split('.')[1];
+  var r = 0;
+  while(f[0] == "0"){
+    f = f.slice(1);
+    r++;
+  }
+  return r;
+}
